@@ -1,22 +1,25 @@
 package com.group.kamiloses.taskmanagementapp.entity;
 
+import com.group.kamiloses.taskmanagementapp.other.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.management.relation.Role;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table("employee")
 public class EmployeeEntity {
     @Id
     private Long id;
     private String username;
     private String password;
-    private String role;
-    private List<TaskEntity> tasks;
+    private Role role;
+    //OneToMany(mapped by)
+    private transient List<TaskEntity> tasks;
 
 }

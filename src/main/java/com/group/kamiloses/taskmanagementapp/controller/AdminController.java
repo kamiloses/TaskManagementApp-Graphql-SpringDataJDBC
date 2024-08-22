@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class AdminController {
 
-    private AdminService adminService;
+    private  AdminService adminService;
     private EmployeeRepository employeeRepository;
     public String createEmployeeAccount(AccountDto accountDto) {
       adminService.createAccount(accountDto);
@@ -28,17 +28,24 @@ public class AdminController {
     }
 
     public List<EmployeeDto> findEmployeesWithoutTask(){
-     adminService.findEmployeesWithoutTask();
+
+        return adminService.findEmployeesWithoutTask();
     }
 
     public List<EmployeeDto> findEmployeesByDeadline(){
+       return adminService.findEmployeesSortedByNearestDeadline();
 
+
+    }
+
+    public EmployeeDto findEmployeeByUsername(String username){
+        return adminService.findEmployeeByUsername(username);
 
     }
      public String selectTasksToEmployee(){
 
 
-     }
+     return null;}
 
 
 }
