@@ -1,0 +1,4 @@
+type Query {
+    getEmployeeByUsername(username: String!): EmployeeDto
+}
+

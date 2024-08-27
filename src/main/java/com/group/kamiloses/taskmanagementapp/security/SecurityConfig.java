@@ -16,12 +16,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-         http.authorizeHttpRequests(request-> request
-                         .requestMatchers("/account").hasRole("ADMIN")
-                         .requestMatchers("/employees/without-tasks").hasRole("ADMIN")
-                         .requestMatchers("/employee/{username}").hasRole("ADMIN")
-                         .requestMatchers("/employee/task/{username}").hasRole("ADMIN")
-                         .anyRequest().denyAll()
+         http.authorizeHttpRequests(request-> request.anyRequest().permitAll()//todo usuń potem permit all
+//                         .requestMatchers("/account").hasRole("ADMIN")
+//                         .requestMatchers("/employees/without-tasks").hasRole("ADMIN")
+//                         .requestMatchers("/employee/{username}").hasRole("ADMIN")
+//                         .requestMatchers("/employee/task/{username}").hasRole("ADMIN")
+//                         .anyRequest().permitAll()
                  ).httpBasic(Customizer.withDefaults());
         return http.build();
     }

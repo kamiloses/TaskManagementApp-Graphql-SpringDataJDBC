@@ -1,0 +1,11 @@
+enum Role{
+    ROLE_USER
+    ROLE_ADMIN
+
+}
+
+enum Status {
+    NOT_STARTED
+    IN_PROGRESS
+    FINISHED
+}

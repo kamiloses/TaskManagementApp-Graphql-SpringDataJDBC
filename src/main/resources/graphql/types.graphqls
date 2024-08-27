@@ -1,0 +1,16 @@
+type EmployeeDto {
+    username: String
+    userTasks:[TaskDto]
+
+}
+
+
+
+type TaskDto{
+    title: String!
+    description: String
+    taskStatus: Status!
+    deadline: String
+
+
+}
