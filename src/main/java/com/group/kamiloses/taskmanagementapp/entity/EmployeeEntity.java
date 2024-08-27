@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class EmployeeEntity {
     private String password;
     private Role role;
     //OneToMany(mapped by)
-    private transient List<TaskEntity> tasks;
+    @Transient
+    private  List<TaskEntity> tasks;
 
 }

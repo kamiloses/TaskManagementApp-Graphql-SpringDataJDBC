@@ -2,50 +2,59 @@ package com.group.kamiloses.taskmanagementapp.controller;
 
 import com.group.kamiloses.taskmanagementapp.dto.AccountDto;
 import com.group.kamiloses.taskmanagementapp.dto.EmployeeDto;
-import com.group.kamiloses.taskmanagementapp.exception.EmployeeNotFoundException;
-import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
+import com.group.kamiloses.taskmanagementapp.dto.TaskDto;
 import com.group.kamiloses.taskmanagementapp.service.AdminService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class AdminController {
 
-    private  AdminService adminService;
-    private EmployeeRepository employeeRepository;
-    public String createEmployeeAccount(AccountDto accountDto) {
+    private final   AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+
+
+
+
+    @PostMapping("/account")
+    public String createEmployeeAccount(@RequestBody AccountDto accountDto) {
       adminService.createAccount(accountDto);
 
         return "Account has been created successfully";
 
 
     }
-    public String deleteEmployeeAccount(Long id){
-        adminService.deleteEmployeeAccount(id);
+    @DeleteMapping("/account")
+    public String deleteEmployeeAccount(@RequestParam String username){
+
+        adminService.deleteEmployeeAccount(username);
 
         return "Account has been deleted successfully";
     }
 
+    @GetMapping("/employees/without-tasks")
     public List<EmployeeDto> findEmployeesWithoutTask(){
 
         return adminService.findEmployeesWithoutTask();
     }
 
-    public List<EmployeeDto> findEmployeesByDeadline(){
-       return adminService.findEmployeesSortedByNearestDeadline();
-
-
-    }
-
-    public EmployeeDto findEmployeeByUsername(String username){
+    @GetMapping("/employee/{username}")
+    public EmployeeDto findEmployeeByUsername(@PathVariable String username){
         return adminService.findEmployeeByUsername(username);
 
     }
-     public String selectTasksToEmployee(){
+    //todo przetestuj dolną metode
+    @PostMapping("/employee/task/{username}")
+     public String selectTasksToEmployee(@PathVariable String username, List<TaskDto> taskDto){
+       adminService.selectTaskToEmployee(username,taskDto);
 
 
-     return null;}
+        return "tasks successfully selected to user"; }
 
 
 }

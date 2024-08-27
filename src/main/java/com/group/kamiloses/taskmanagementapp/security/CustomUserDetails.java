@@ -1,7 +1,6 @@
 package com.group.kamiloses.taskmanagementapp.security;
 
 import com.group.kamiloses.taskmanagementapp.entity.EmployeeEntity;
-import com.group.kamiloses.taskmanagementapp.other.Role;
 import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,9 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 @Component
 public class CustomUserDetails implements UserDetailsService {
     private final EmployeeRepository employeeRepository;

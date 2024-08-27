@@ -8,6 +8,7 @@ import com.group.kamiloses.taskmanagementapp.exception.InvalidIdentifierExceptio
 import com.group.kamiloses.taskmanagementapp.other.Status;
 import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
 import com.group.kamiloses.taskmanagementapp.repository.TaskRepository;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,30 +30,32 @@ public class EmployeeService {
     public List<TaskDto> findAllTasks() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         EmployeeEntity employee = employeeRepository.findByUsername(username).get();
-        return mapper.tasksEntityToDto(employee.getTasks());
+        return mapper.tasksEntityToDto(employee);
     }
 
-
-    public String modifyTaskStatus(Long id) {
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        EmployeeEntity employee = employeeRepository.findByUsername(username).get();
-        if (employee.getTasks().stream().noneMatch(taskEntity -> taskEntity.getId().equals(id))) {
-            throw new InvalidIdentifierException("This task is not related to your own task");
-        }
-        TaskEntity taskEntity = taskRepository.findById(id).get();
-        if (taskEntity.getTaskStatus().equals(Status.FINISHED)) {
-            throw new InternalException("You cannot modify finished Task");
-        }
-        if (taskEntity.getTaskStatus().equals(Status.IN_PROGRESS)) {
-            taskEntity.setTaskStatus(Status.FINISHED);
-        }
-        if (taskEntity.getTaskStatus().equals(Status.NOT_STARTED)) {
-            taskEntity.setTaskStatus(Status.IN_PROGRESS);
-        }
-        taskRepository.save(taskEntity);
-        return "Status has been modified successfully";
-    }
+//taskRepository.findAllByEmployeeId(employee.getId())
+//    public String modifyTaskStatus(Long id) {
+//
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        EmployeeEntity employee = employeeRepository.findByUsername(username).get();
+//
+//        if (employee.getTasks().stream().noneMatch(taskEntity -> taskEntity.getId().equals(id))) {
+//            throw new InvalidIdentifierException("This task is not related to your own task");
+//        }
+//        TaskEntity taskEntity = taskRepository.findById(id).get();
+//        if (taskEntity.getTaskStatus().equals(Status.FINISHED)) {
+//            throw new InternalException("You cannot modify finished Task");
+//        }
+//        if (taskEntity.getTaskStatus().equals(Status.IN_PROGRESS)) {
+//            taskEntity.setTaskStatus(Status.FINISHED);
+//        }
+//        if (taskEntity.getTaskStatus().equals(Status.NOT_STARTED)) {
+//            taskEntity.setTaskStatus(Status.IN_PROGRESS);
+//        }
+//        taskRepository.save(taskEntity);
+//        return "Status has been modified successfully";
+//    }
+//
 
 
 }
