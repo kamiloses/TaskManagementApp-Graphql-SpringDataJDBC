@@ -16,12 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-         http.authorizeHttpRequests(request-> request.anyRequest().permitAll()//todo usuń potem
-//                         .requestMatchers("/account").hasRole("ADMIN")
-//                         .requestMatchers("/employees/without-tasks").hasRole("ADMIN")
-//                         .requestMatchers("/employee/{username}").hasRole("ADMIN")
-//                         .requestMatchers("/employee/task/{username}").hasRole("ADMIN")
-//                         .anyRequest().permitAll()
+         http.authorizeHttpRequests(request-> request.anyRequest().authenticated()//todo dostosuj by metody z graphql działały zaleznie od roli(jezeli sie tak da)
                  ).httpBasic(Customizer.withDefaults());
         return http.build();
     }

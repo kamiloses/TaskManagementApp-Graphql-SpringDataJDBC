@@ -33,29 +33,26 @@ public class EmployeeService {
         return mapper.tasksEntityToDto(employee);
     }
 
-//taskRepository.findAllByEmployeeId(employee.getId())
-//    public String modifyTaskStatus(Long id) {
-//
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        EmployeeEntity employee = employeeRepository.findByUsername(username).get();
-//
-//        if (employee.getTasks().stream().noneMatch(taskEntity -> taskEntity.getId().equals(id))) {
-//            throw new InvalidIdentifierException("This task is not related to your own task");
-//        }
-//        TaskEntity taskEntity = taskRepository.findById(id).get();
-//        if (taskEntity.getTaskStatus().equals(Status.FINISHED)) {
-//            throw new InternalException("You cannot modify finished Task");
-//        }
-//        if (taskEntity.getTaskStatus().equals(Status.IN_PROGRESS)) {
-//            taskEntity.setTaskStatus(Status.FINISHED);
-//        }
-//        if (taskEntity.getTaskStatus().equals(Status.NOT_STARTED)) {
-//            taskEntity.setTaskStatus(Status.IN_PROGRESS);
-//        }
-//        taskRepository.save(taskEntity);
-//        return "Status has been modified successfully";
-//    }
-//
+    public String modifyTaskStatus(Long id) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        EmployeeEntity employee = employeeRepository.findByUsername(username).get();
+
+
+        TaskEntity taskEntity = taskRepository.findAllByIdAndEmployeeId(id, employee.getId()).get();
+        if (taskEntity.getTaskStatus().equals(Status.FINISHED)) {
+            throw new InternalException("You cannot modify finished Task");
+        }
+        if (taskEntity.getTaskStatus().equals(Status.IN_PROGRESS)) {
+            taskEntity.setTaskStatus(Status.FINISHED);
+        }
+        if (taskEntity.getTaskStatus().equals(Status.NOT_STARTED)) {
+            taskEntity.setTaskStatus(Status.IN_PROGRESS);
+        }
+        taskRepository.save(taskEntity);
+        return "Status has been modified successfully";
+    }
+
 
 
 }

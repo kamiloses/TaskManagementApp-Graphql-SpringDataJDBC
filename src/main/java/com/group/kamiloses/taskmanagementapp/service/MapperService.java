@@ -32,7 +32,7 @@ public class MapperService {
     protected List<TaskDto> tasksEntityToDto(EmployeeEntity employee) {
         List<TaskEntity> taskEntity = taskRepository.findAllByEmployeeId(employee.getId());
         if (taskEntity == null) return Collections.emptyList();
-        return taskEntity.stream().map(task -> new TaskDto(task.getTitle(), task.getDescription(), task.getTaskStatus(), task.getDeadline())).toList();
+        return taskEntity.stream().map(task -> new TaskDto(task.getTitle(), task.getDescription(), task.getTaskStatus(), task.getDeadline(),task.getEmployeeId())).toList();
     }
 
 }

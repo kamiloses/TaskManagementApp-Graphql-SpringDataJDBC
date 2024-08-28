@@ -16,6 +16,7 @@ public class TaskDto {
     private String description;
     private Status TaskStatus;
     private Date deadline;
+    private Long employeeId;
 
 
 }

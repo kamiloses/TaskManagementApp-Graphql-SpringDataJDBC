@@ -24,6 +24,7 @@ input TaskDtoInput{
     description: String
     taskStatus: Status!
     deadline: String
+    employeeId:Int!
 
 
 }

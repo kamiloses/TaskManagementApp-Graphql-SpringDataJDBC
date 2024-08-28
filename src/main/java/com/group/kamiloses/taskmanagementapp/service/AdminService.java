@@ -34,7 +34,7 @@ public class AdminService {
     public void createAccount(AccountDto accountDto) {
         if (employeeRepository.existsByUsername(accountDto.getUsername())) {
             throw new ThisEmployeeAlreadyExistsException("This employee already exists");
-        }//todo obsłuż wyjątek
+        }
         employeeRepository.save(mapper.accountDtoToEntity(accountDto));
 
 
@@ -43,7 +43,7 @@ public class AdminService {
     public void deleteEmployeeAccount(String username) {
         if (!employeeRepository.existsByUsername(username)) {
             throw new EmployeeNotFoundException("This employee was not found in the database");
-        }//todo obsłuż wyjątek
+        }
         employeeRepository.deleteByUsername(username);
     }
 
@@ -68,7 +68,7 @@ public class AdminService {
                .map(employee -> new EmployeeDto(employee.getUsername(),mapper.tasksEntityToDto(employee)))
                .orElseThrow(()->new EmployeeNotFoundException("This employee was not found in the database"));
 
-       //todo obsłuż wyjątek
+
     }
 
     public void selectTaskToEmployee(String username, List<TaskDto> taskDto){

@@ -1,11 +1,19 @@
 type Query {
     getEmployeeByUsername(username: String!): EmployeeDto
     findEmployeesWithoutTask: [EmployeeDto]
+
+
+#    employee
+    findAllTasks:[TaskDto]
 }
 
 type Mutation{
     createEmployeeAccount(accountDto: AccountDto): String
     deleteEmployeeAccount(username : String): String
     selectTasksToEmployee(username : String,taskDto : [TaskDtoInput]): String
+
+#    employee
+
+    modifyTaskStatus(id : ID): String
 
 }
