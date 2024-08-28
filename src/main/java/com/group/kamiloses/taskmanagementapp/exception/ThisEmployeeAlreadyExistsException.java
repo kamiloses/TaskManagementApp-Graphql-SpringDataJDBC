@@ -1,4 +1,4 @@
-package com.group.kamiloses.taskmanagementapp.service;
+package com.group.kamiloses.taskmanagementapp.exception;
 
 public class ThisEmployeeAlreadyExistsException extends RuntimeException {
     public ThisEmployeeAlreadyExistsException(String message) {

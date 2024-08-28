@@ -14,3 +14,16 @@ type TaskDto{
 
 
 }
+input AccountDto{
+    username: String!
+    password: String!
+
+}
+input TaskDtoInput{
+    title: String!
+    description: String
+    taskStatus: Status!
+    deadline: String
+
+
+}

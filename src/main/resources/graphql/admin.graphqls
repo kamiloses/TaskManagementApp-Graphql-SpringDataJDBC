@@ -1,0 +1,11 @@
+type Query {
+    getEmployeeByUsername(username: String!): EmployeeDto
+    findEmployeesWithoutTask: [EmployeeDto]
+}
+
+type Mutation{
+    createEmployeeAccount(accountDto: AccountDto): String
+    deleteEmployeeAccount(username : String): String
+    selectTasksToEmployee(username : String,taskDto : [TaskDtoInput]): String
+
+}

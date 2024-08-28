@@ -6,6 +6,7 @@ import com.group.kamiloses.taskmanagementapp.dto.TaskDto;
 import com.group.kamiloses.taskmanagementapp.entity.EmployeeEntity;
 import com.group.kamiloses.taskmanagementapp.entity.TaskEntity;
 import com.group.kamiloses.taskmanagementapp.exception.EmployeeNotFoundException;
+import com.group.kamiloses.taskmanagementapp.exception.ThisEmployeeAlreadyExistsException;
 import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
 import com.group.kamiloses.taskmanagementapp.repository.TaskRepository;
 import org.springframework.stereotype.Service;

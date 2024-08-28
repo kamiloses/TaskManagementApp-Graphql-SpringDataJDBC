@@ -1,84 +1,150 @@
 package com.group.kamiloses.taskmanagementapp.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.group.kamiloses.taskmanagementapp.dto.AccountDto;
-import com.group.kamiloses.taskmanagementapp.service.AdminService;
+import com.group.kamiloses.taskmanagementapp.dto.EmployeeDto;
+import com.group.kamiloses.taskmanagementapp.entity.EmployeeEntity;
+import com.group.kamiloses.taskmanagementapp.other.Role;
+import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.graphql.GraphQlResponse;
+import org.springframework.graphql.test.tester.GraphQlTester;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.Map;
 
-@ExtendWith(MockitoExtension.class)
+import static org.junit.jupiter.api.Assertions.*;
+
+@AutoConfigureGraphQlTester
+@SpringBootTest
 class AdminControllerTest {
-    private MockMvc mockMvc;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectWriter objectWriter = objectMapper.writer();
-    @MockBean
-    private AdminService adminService;
-    @Mock
-    AdminController adminController;
+    @Autowired
+    GraphQlTester graphQlTester;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+    void setUp() {
+        employeeRepository.deleteAll();
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setUsername("Adam");
+        employeeEntity.setPassword("Adam");
+        employeeEntity.setRole(Role.ROLE_USER);
+        employeeRepository.save(employeeEntity);
+    }
+
+    @Test
+    void testFindEmployeeByUsername() {
+        String document = """
+                query {
+                    getEmployeeByUsername(username: "Adam") {
+                        username
+                        userTasks {
+                            title
+                            description
+                            taskStatus
+                            deadline
+                        }
+                    }
+                }
+                """;
+        graphQlTester.document(document).execute().path("getEmployeeByUsername").entity(EmployeeDto.class)
+                .satisfies(employee -> {
+                    assertEquals("Adam", employee.getUsername());
+
+                });
+
+    }
+
+    @Test
+    void testFindEmployeeByUsernameNotFound() {
+        String document = """
+                query {
+                    getEmployeeByUsername(username: "123") {
+                        username
+                        userTasks {
+                            title
+                            description
+                            taskStatus
+                            deadline
+                        }
+                    }
+                }
+                """;
+
+
+        graphQlTester.document(document).execute().errors().expect(
+                exception -> {
+                    assertEquals("This employee was not found in the database", exception.getMessage());
+                    return true;
+                });
+
+
+    }
+
+
+    @Test
+    void testFindEmployeeWithoutTask() {
+        String document = """
+                query{
+                findEmployeesWithoutTask{
+                username
+                userTasks{
+                title
+                }
+                                
+                }
+                                
+                }
+                """;
+
+        graphQlTester.document(document)
+                .execute()
+                .path("findEmployeesWithoutTask[*].userTasks[*].title")
+                .entityList(String.class)
+                .hasSize(0);
+    }
+
+
+    @Test
+    void testCreateEmployeeAccount() {
+        String document = """
+                mutation CreateEmployeeAccount($accountDto: AccountDto!) {
+                  createEmployeeAccount(accountDto: $accountDto)
+                }
+                """;
+
+        Map<String, Object> variables = Map.of(
+                "accountDto", Map.of(
+                        "username", "Jan",
+                        "password", "Kowalski"));
+
+
+          graphQlTester.document(document).variables(variables).execute().path("createEmployeeAccount")
+                  .entity(String.class).isEqualTo("Account has been created successfully")
+                ;
+
     }
     @Test
-    void testCreateEmployeeAccount() throws Exception {
-        AccountDto accountDto = new AccountDto("admin","admin123");
-        String body = objectWriter.writeValueAsString(accountDto);
-        mockMvc.perform(post("/account")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andExpect(status().isOk());
+    void testDeleteEmployeeAccount(){
+        String document= """
+                mutation deleteAccount($username: String){
+                  deleteEmployeeAccount(username:$username)
+                }
+                """;
+        Map<String, Object> variables = Map.of(
+                "username", "Adam");
+
+        graphQlTester.document(document).variables(variables).execute().path("deleteEmployeeAccount")
+                .entity(String.class).isEqualTo("Account has been deleted successfully");
     }
 
-//    @Test
-//    void testDeleteEmployeeAccount() throws Exception {
-//        String username="adam";
-//
-//        mockMvc.perform(delete("/account/{username}", username))
-//                .andExpect(status().isOk());
-//    }
 
 
 
-//
-//    @Test
-//    void testFindEmployeesByDeadline() throws Exception {
-//        EmployeeDto employeeDto = new EmployeeDto(); // Populate with test data if needed
-//        List<EmployeeDto> employees = Collections.singletonList(employeeDto);
-//
-//        when(adminService.findEmployeesSortedByNearestDeadline()).thenReturn(employees);
-//
-//        mockMvc.perform(get("/employee/by-deadline"))
-//                .andExpect(status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].someField").value("someValue")); // Adjust based on your EmployeeDto
-//    }
-//
-//    @Test
-//    void testFindEmployeeByUsername() throws Exception {
-//        String username = "testuser";
-//        EmployeeDto employeeDto = new EmployeeDto(); // Populate with test data if needed
-//
-//        when(adminService.findEmployeeByUsername(username)).thenReturn(employeeDto);
-//
-//        mockMvc.perform(get("/employee/{username}", username))
-//                .andExpect(status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.someField").value("someValue")); // Adjust based on your EmployeeDto
-//    }
-//
 
 }

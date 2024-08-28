@@ -16,7 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-         http.authorizeHttpRequests(request-> request.anyRequest().permitAll()//todo usuń potem permit all
+         http.authorizeHttpRequests(request-> request.anyRequest().permitAll()//todo usuń potem
 //                         .requestMatchers("/account").hasRole("ADMIN")
 //                         .requestMatchers("/employees/without-tasks").hasRole("ADMIN")
 //                         .requestMatchers("/employee/{username}").hasRole("ADMIN")

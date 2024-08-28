@@ -5,6 +5,7 @@ import com.group.kamiloses.taskmanagementapp.dto.EmployeeDto;
 import com.group.kamiloses.taskmanagementapp.dto.TaskDto;
 import com.group.kamiloses.taskmanagementapp.service.AdminService;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,37 +25,36 @@ public class AdminController {
 
 
 
-    @PostMapping("/account")
-    public String createEmployeeAccount(@RequestBody AccountDto accountDto) {
-      adminService.createAccount(accountDto); //todo obsłuż
+    @MutationMapping("createEmployeeAccount")
+    public String createEmployeeAccount(@Argument AccountDto accountDto) {
+      adminService.createAccount(accountDto);
 
         return "Account has been created successfully";
 
 
     }
-    @DeleteMapping("/account")
-    public String deleteEmployeeAccount(@RequestParam String username){
+    @MutationMapping("deleteEmployeeAccount")
+    public String deleteEmployeeAccount(@Argument String username){
 
-        adminService.deleteEmployeeAccount(username);//todo obsłuż
+        adminService.deleteEmployeeAccount(username);
 
         return "Account has been deleted successfully";
     }
 
-    @GetMapping("/employees/without-tasks")
-    public List<EmployeeDto> findEmployeesWithoutTask(){//todo obsłuż
+    @QueryMapping("findEmployeesWithoutTask")
+    public List<EmployeeDto> findEmployeesWithoutTask(){
 
         return adminService.findEmployeesWithoutTask();
     }
 
     @QueryMapping("getEmployeeByUsername")
     public EmployeeDto findEmployeeByUsername(@Argument String username){
-        return adminService.findEmployeeByUsername(username);//todo obsłuż
+        return adminService.findEmployeeByUsername(username);
 
     }
-    //todo przetestuj dolną metode
-    @PostMapping("/employee/task/{username}")
-     public String selectTasksToEmployee(@PathVariable String username, List<TaskDto> taskDto){
-       adminService.selectTaskToEmployee(username,taskDto);//todo obsłuż
+    @MutationMapping("selectTasksToEmployee")
+     public String selectTasksToEmployee(@Argument String username,@Argument List<TaskDto> taskDto){
+       adminService.selectTaskToEmployee(username,taskDto);
 
 
         return "tasks successfully selected to user"; }
