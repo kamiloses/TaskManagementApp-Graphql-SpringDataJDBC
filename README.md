@@ -1,4 +1,4 @@
-A simple API that allows managing tasks, assigning tasks to employees, and creating employee accounts. The main purpose of the application was to utilize GraphQL and Spring Data JDBC.
+A simple API that allows managing tasks, assigning tasks to employees, creating employee accounts etc. The main purpose of the application was to utilize GraphQL and Spring Data JDBC.
 
 Libraries/Frameworks used:
 
