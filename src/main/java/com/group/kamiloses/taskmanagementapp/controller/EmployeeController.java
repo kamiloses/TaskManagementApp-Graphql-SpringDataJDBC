@@ -4,6 +4,8 @@ import com.group.kamiloses.taskmanagementapp.dto.TaskDto;
 import com.group.kamiloses.taskmanagementapp.repository.EmployeeRepository;
 import com.group.kamiloses.taskmanagementapp.repository.TaskRepository;
 import com.group.kamiloses.taskmanagementapp.service.EmployeeService;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -21,12 +23,14 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
     @QueryMapping("findAllTasks")
+    //@Cacheable(value = "userTasks",key = "'allTasks'")
     public List<TaskDto> findAllTasks() {
         return employeeService.findAllTasks();
     }
 
 
     @MutationMapping("modifyTaskStatus")
+   // @CachePut(value ="userTasks",key = "#id")
     public String modifyTaskStatus(@Argument Long id) {
     return employeeService.modifyTaskStatus(id);
 

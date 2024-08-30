@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureG
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.graphql.GraphQlResponse;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.test.context.ActiveProfiles;
 
 
 import java.util.Map;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureGraphQlTester
 @SpringBootTest
+@ActiveProfiles("test")
 class AdminControllerTest {
 
     @Autowired

@@ -4,11 +4,12 @@ import com.group.kamiloses.taskmanagementapp.dto.AccountDto;
 import com.group.kamiloses.taskmanagementapp.dto.EmployeeDto;
 import com.group.kamiloses.taskmanagementapp.dto.TaskDto;
 import com.group.kamiloses.taskmanagementapp.service.AdminService;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,11 +49,13 @@ public class AdminController {
     }
 
     @QueryMapping("getEmployeeByUsername")
+    //@Cacheable(value = "employees",key = "#username")
     public EmployeeDto findEmployeeByUsername(@Argument String username){
         return adminService.findEmployeeByUsername(username);
 
     }
     @MutationMapping("selectTasksToEmployee")
+    //@CachePut(value = "userTasks",key ="#username")
      public String selectTasksToEmployee(@Argument String username,@Argument List<TaskDto> taskDto){
        adminService.selectTaskToEmployee(username,taskDto);
 
